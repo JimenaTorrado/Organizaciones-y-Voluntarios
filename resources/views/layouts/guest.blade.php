@@ -190,6 +190,17 @@
             font-size: 14px;
         }
 
+        .alert-ok {
+            margin-bottom: 16px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: var(--verde-claro);
+            color: var(--verde-oscuro);
+            font-size: 13px;
+            font-weight: 600;
+            text-align: left;
+        }
+
         .field.invalid .input-group { border-color: #dc2626; }
         .error { display: block; margin-top: 4px; color: #dc2626; font-size: 12px; }
 

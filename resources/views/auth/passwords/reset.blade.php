@@ -1,65 +1,60 @@
-@extends('layouts.app')
+@extends('layouts.guest')
+
+@section('title', 'Nueva contraseña')
+@section('icon', 'fa-key')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
+    <h1>Nueva contraseña</h1>
+    <p class="lead">Escribe tu correo y la contraseña nueva que quieres usar.</p>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('password.update') }}">
-                        @csrf
+    <form method="POST" action="{{ route('password.update') }}" class="form">
+        @csrf
 
-                        <input type="hidden" name="token" value="{{ $token }}">
+        <input type="hidden" name="token" value="{{ $token }}">
 
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+        <div class="field @error('email') invalid @enderror">
+            <label for="email">Correo electrónico</label>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input id="email" type="email" name="email" value="{{ $email ?? old('email') }}"
+                       placeholder="tucorreo@ejemplo.com" required autocomplete="email" autofocus>
+            </div>
+            @error('email')
+            <span class="error">{{ $message }}</span>
+            @enderror
+        </div>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
+        <div class="field @error('password') invalid @enderror">
+            <label for="password">Contraseña nueva</label>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input id="password" type="password" name="password"
+                       placeholder="Mínimo 8 caracteres" required autocomplete="new-password">
+            </div>
+            @error('password')
+            <span class="error">{{ $message }}</span>
+            @enderror
+        </div>
 
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Reset Password') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+        <div class="field">
+            <label for="password-confirm">Confirmar contraseña</label>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input id="password-confirm" type="password" name="password_confirmation"
+                       placeholder="Repite la contraseña" required autocomplete="new-password">
             </div>
         </div>
+
+        <button type="submit" class="btn btn-verde btn-block">
+            <i class="fas fa-save"></i> Guardar contraseña
+        </button>
+    </form>
+
+    <div class="divider">¿Ya la recordaste?</div>
+
+    <div class="actions">
+        <a href="{{ route('login') }}" class="btn btn-azul">
+            <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+        </a>
     </div>
-</div>
 @endsection
