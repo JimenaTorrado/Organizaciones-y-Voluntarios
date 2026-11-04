@@ -13,12 +13,16 @@ return new class extends Migration
     {
         Schema::create('organization_volunteer', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('organization_id')->constrained();
-            $table->foreignId('volunteer_id')->constrained();
+            // cascadeOnDelete: al borrar una organización o un voluntario se borran sus vínculos
+            $table->foreignId('organization_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('volunteer_id')->constrained()->cascadeOnDelete();
             $table->date('join_date');
             $table->string('role');
-            $table->string('registered_by');
+            $table->foreignId('registered_by')->constrained('users');
             $table->timestamps();
+
+            // un voluntario solo puede estar una vez en cada organización
+            $table->unique(['organization_id', 'volunteer_id']);
 
         });
     }

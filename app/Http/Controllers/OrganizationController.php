@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrganizationRequest;
 use App\Models\Organization;
 use App\Models\OrganizationVolunteer;
 use App\Models\Volunteer;
@@ -30,22 +31,12 @@ class OrganizationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(OrganizationRequest $request)
     {
-        $data = $request->validate([
-            'name'          => 'required|string|max:255',
-            'type'          => 'required|string|max:100',
-            'phone'         => 'required|string|max:30',
-            'email'         => 'required|email|max:255|unique:organizations,email',
-            'address'       => 'required|string|max:255',
-            'city'          => 'required|string|max:100',
-            'creation_date' => 'required|date',
-            'description'   => 'nullable|string',
+        Organization::create($request->validated() + [
+            'status'        => true,
+            'registered_by' => $request->user()->id,
         ]);
-
-        $data['status']        = 1;
-        $data['registered_by'] = $request->user()->id;
-        Organization::create($data);
 
         return redirect()->route('organizations.index')->with('success', 'Organización creada correctamente');
     }
@@ -62,27 +53,16 @@ class OrganizationController extends Controller
         return view('organizations.edit', compact('organization'));
     }
 
-    public function update(Request $request, Organization $organization)
+    public function update(OrganizationRequest $request, Organization $organization)
     {
-        $data = $request->validate([
-            'name'          => 'required|string|max:255',
-            'type'          => 'required|string|max:100',
-            'phone'         => 'required|string|max:30',
-            'email'         => 'required|email|max:255|unique:organizations,email,' . $organization->id,
-            'address'       => 'required|string|max:255',
-            'city'          => 'required|string|max:100',
-            'creation_date' => 'required|date',
-            'description'   => 'nullable|string',
-        ]);
-
-        $organization->update($data);
+        $organization->update($request->validated());
 
         return redirect()->route('organizations.index')->with('success', 'Organización actualizada correctamente');
     }
 
     public function destroy(Organization $organization)
     {
-        $organization->membership()->delete();   // evita error de llave foránea
+        // los vínculos con voluntarios se borran solos (cascadeOnDelete en la migración)
         $organization->delete();
 
         return redirect()->route('organizations.index')->with('success', 'Organización eliminada correctamente');
@@ -99,12 +79,11 @@ class OrganizationController extends Controller
         ]);
 
         // evita duplicados
-        if ($organization->membership()->where('volunteer_id', $data['volunteer_id'])->exists()) {
+        if ($organization->volunteers()->whereKey($data['volunteer_id'])->exists()) {
             return back()->with('error', 'Ese voluntario ya pertenece a la organización');
         }
 
-        $organization->membership()->create([
-            'volunteer_id'  => $data['volunteer_id'],
+        $organization->volunteers()->attach($data['volunteer_id'], [
             'join_date'     => now()->toDateString(),
             'role'          => $data['role'],
             'registered_by' => $request->user()->id,

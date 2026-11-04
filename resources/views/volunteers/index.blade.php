@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Lista de voluntarios')
 
@@ -43,7 +43,7 @@
                                     <td>{{ $volunteer->id }}</td>
                                     <td>
                                         @if($volunteer->image)
-                                        <img src="{{ asset('uploads/volunteers/' . $volunteer->image) }}" alt="Foto"
+                                        <img src="{{ asset('storage/' . $volunteer->image) }}" alt="Foto"
                                              class="img-circle" style="width:36px;height:36px;object-fit:cover;">
                                         @endif
                                     </td>

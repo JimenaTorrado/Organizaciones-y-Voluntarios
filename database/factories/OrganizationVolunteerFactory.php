@@ -25,7 +25,7 @@ class OrganizationVolunteerFactory extends Factory
             'volunteer_id'    => Volunteer::factory(),
             'join_date'       => $this->faker->dateTimeBetween('-2 years', 'now')->format('Y-m-d'),
             'role'            => $this->faker->randomElement(OrganizationVolunteer::ROLES),
-            'registered_by'   => (string) (User::query()->value('id') ?? 1),
+            'registered_by'   => User::factory(),
         ];
     }
 }

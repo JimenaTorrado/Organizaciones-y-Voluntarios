@@ -28,7 +28,7 @@ class OrganizationFactory extends Factory
             'city'          => $this->faker->city(),
             'creation_date' => $this->faker->dateTimeBetween('-20 years', 'now')->format('Y-m-d'),
             'status'        => $this->faker->boolean(80),
-            'registered_by' => (string) (User::query()->value('id') ?? 1),
+            'registered_by' => User::factory(),
         ];
     }
 }

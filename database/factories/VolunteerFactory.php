@@ -26,7 +26,7 @@ class VolunteerFactory extends Factory
             'city'          => $this->faker->city(),
             'birth_date'    => $this->faker->dateTimeBetween('-60 years', '-18 years')->format('Y-m-d'),
             'status'        => true,
-            'registered_by' => (string) (User::query()->value('id') ?? 1),
+            'registered_by' => User::factory(),
         ];
     }
 }

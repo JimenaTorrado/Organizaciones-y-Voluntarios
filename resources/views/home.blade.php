@@ -1,22 +1,55 @@
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+@extends('layouts.admin')
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
+@section('title', 'Dashboard')
+
+@section('content')
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <h1>@yield('title')</h1>
+        </div>
+    </section>
+    @include('layouts.partials.msg')
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-4 col-12">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{ $organizationsCount }}</h3>
+                            <p>Organizaciones</p>
                         </div>
-                    @endif
-
-                   {{ __('You are logged in!') }}
-                <div class="mt-4">
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-danger">
-                            Cerrar Sesión
-                        </button>
-                    </form>
+                        <div class="icon"><i class="fas fa-building"></i></div>
+                        <a href="{{ route('organizations.index') }}" class="small-box-footer">
+                            Ver lista <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
                 </div>
+
+                <div class="col-lg-4 col-12">
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>{{ $volunteersCount }}</h3>
+                            <p>Voluntarios</p>
+                        </div>
+                        <div class="icon"><i class="fas fa-hands-helping"></i></div>
+                        <a href="{{ route('volunteers.index') }}" class="small-box-footer">
+                            Ver lista <i class="fas fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-12">
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>{{ $membershipsCount }}</h3>
+                            <p>Vínculos</p>
+                        </div>
+                        <div class="icon"><i class="fas fa-link"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@endsection

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\VolunteerRequest;
 use App\Models\Organization;
 use App\Models\Volunteer;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class VolunteerController extends Controller
 {
@@ -34,35 +35,18 @@ class VolunteerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(VolunteerRequest $request)
     {
-        $data = $request->validate([
-            'first_name'      => 'required|string|max:255',
-            'last_name'       => 'required|string|max:255',
-            'phone'           => 'required|string|max:30',
-            'email'           => 'required|email|max:255|unique:volunteers,email',
-            'city'            => 'required|string|max:100',
-            'birth_date'      => 'required|date|before:today',
-            'image'           => 'nullable|image|max:2048',
-            'organizations'   => 'nullable|array',
-            'organizations.*' => 'exists:organizations,id',
-        ]);
+        $data                  = $request->safe()->except(['organizations', 'image']);
+        $data['image']         = $request->file('image')?->store('volunteers', 'public');
+        $data['status']        = true;
+        $data['registered_by'] = $request->user()->id;
 
-        $volunteerData                  = collect($data)->except(['organizations', 'image'])->all();
-        $volunteerData['image']         = $this->storeImage($request);
-        $volunteerData['status']        = 1;
-        $volunteerData['registered_by'] = $request->user()->id;
-
-        $volunteer = Volunteer::create($volunteerData);
-
-        foreach ($request->input('organizations', []) as $organizationId) {
-            $volunteer->membership()->create([
-                'organization_id' => $organizationId,
-                'join_date'       => now()->toDateString(),
-                'role'            => self::DEFAULT_ROLE,
-                'registered_by'   => $request->user()->id,
-            ]);
-        }
+        // si falla algo, no queda un voluntario creado sin sus vínculos
+        DB::transaction(function () use ($request, $data) {
+            $volunteer = Volunteer::create($data);
+            $volunteer->organizations()->attach($request->validated('organizations', []), $this->pivotData($request));
+        });
 
         return redirect()->route('volunteers.index')->with('success', 'Voluntario creado correctamente');
     }
@@ -76,82 +60,62 @@ class VolunteerController extends Controller
     public function edit(Volunteer $volunteer)
     {
         $organizations = Organization::orderBy('name')->get();
-        $vinculadas    = $volunteer->membership()->pluck('organization_id')->toArray();
+        $vinculadas    = $volunteer->organizations()->pluck('organizations.id')->toArray();
         return view('volunteers.edit', compact('volunteer', 'organizations', 'vinculadas'));
     }
 
-    public function update(Request $request, Volunteer $volunteer)
+    public function update(VolunteerRequest $request, Volunteer $volunteer)
     {
-        $data = $request->validate([
-            'first_name'      => 'required|string|max:255',
-            'last_name'       => 'required|string|max:255',
-            'phone'           => 'required|string|max:30',
-            'email'           => 'required|email|max:255|unique:volunteers,email,' . $volunteer->id,
-            'city'            => 'required|string|max:100',
-            'birth_date'      => 'required|date|before:today',
-            'image'           => 'nullable|image|max:2048',
-            'organizations'   => 'nullable|array',
-            'organizations.*' => 'exists:organizations,id',
-        ]);
-
-        $volunteerData = collect($data)->except(['organizations', 'image'])->all();
+        $data = $request->safe()->except(['organizations', 'image']);
 
         if ($request->hasFile('image')) {
             $this->deleteImage($volunteer->image);
-            $volunteerData['image'] = $this->storeImage($request);
+            $data['image'] = $request->file('image')->store('volunteers', 'public');
         }
 
-        $volunteer->update($volunteerData);
+        DB::transaction(function () use ($request, $volunteer, $data) {
+            $volunteer->update($data);
 
-        $nuevas   = collect($request->input('organizations', []))->map(fn ($id) => (int) $id);
-        $actuales = $volunteer->membership()->pluck('organization_id');
+            $nuevas   = collect($request->validated('organizations', []))->map(fn ($id) => (int) $id);
+            $actuales = $volunteer->organizations()->pluck('organizations.id');
 
-        // quita las que se desmarcaron
-        $volunteer->membership()->whereNotIn('organization_id', $nuevas)->delete();
-
-        // agrega las nuevas
-        foreach ($nuevas->diff($actuales) as $organizationId) {
-            $volunteer->membership()->create([
-                'organization_id' => $organizationId,
-                'join_date'       => now()->toDateString(),
-                'role'            => self::DEFAULT_ROLE,
-                'registered_by'   => $request->user()->id,
-            ]);
-        }
+            // quita las que se desmarcaron y agrega las nuevas; las que siguen marcadas
+            // no se tocan, así conservan el rol y la fecha con que se vincularon
+            $volunteer->organizations()->detach($actuales->diff($nuevas)->values()->all());
+            $volunteer->organizations()->attach($nuevas->diff($actuales)->values()->all(), $this->pivotData($request));
+        });
 
         return redirect()->route('volunteers.index')->with('success', 'Voluntario actualizado correctamente');
     }
 
     public function destroy(Volunteer $volunteer)
     {
-        $volunteer->membership()->delete();
-        $this->deleteImage($volunteer->image);
+        // los vínculos con organizaciones se borran solos (cascadeOnDelete en la migración)
         $volunteer->delete();
+        $this->deleteImage($volunteer->image);
 
         return redirect()->route('volunteers.index')->with('success', 'Voluntario eliminado correctamente');
     }
 
     /**
-     * Guarda la foto subida en public/uploads/volunteers y devuelve el nombre del archivo.
+     * Datos de la tabla intermedia al vincular desde el formulario del voluntario.
      */
-    private function storeImage(Request $request): ?string
+    private function pivotData(Request $request): array
     {
-        if (!$request->hasFile('image')) {
-            return null;
-        }
-
-        $image     = $request->file('image');
-        $imagename = Str::slug($request->input('first_name')) . '-' . Carbon::now()->toDateString()
-            . '-' . uniqid() . '.' . $image->extension();
-        $image->move(public_path('uploads/volunteers'), $imagename);
-
-        return $imagename;
+        return [
+            'join_date'     => now()->toDateString(),
+            'role'          => self::DEFAULT_ROLE,
+            'registered_by' => $request->user()->id,
+        ];
     }
 
+    /**
+     * Borra la foto guardada en storage/app/public (se ve en /storage gracias a storage:link).
+     */
     private function deleteImage(?string $image): void
     {
-        if ($image && file_exists(public_path('uploads/volunteers/' . $image))) {
-            unlink(public_path('uploads/volunteers/' . $image));
+        if ($image) {
+            Storage::disk('public')->delete($image);
         }
     }
 }

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('city');
             $table->date('creation_date');
             $table->boolean('status')->default(true);
-            $table->string('registered_by');
+            $table->foreignId('registered_by')->constrained('users');
             $table->timestamps();
         });
     }

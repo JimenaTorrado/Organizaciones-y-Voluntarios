@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Detalle del voluntario')
 
@@ -20,7 +20,7 @@
                 </div>
                 <div class="card-body">
                     @if($volunteer->image)
-                    <img src="{{ asset('uploads/volunteers/' . $volunteer->image) }}" alt="Foto" class="mb-3" style="max-width:150px;">
+                    <img src="{{ asset('storage/' . $volunteer->image) }}" alt="Foto" class="mb-3" style="max-width:150px;">
                     @endif
                     <p><strong>Correo:</strong> {{ $volunteer->email }}</p>
                     <p><strong>Teléfono:</strong> {{ $volunteer->phone }}</p>

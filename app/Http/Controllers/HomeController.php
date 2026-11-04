@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Organization;
+use App\Models\OrganizationVolunteer;
+use App\Models\Volunteer;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return view('home', [
+            'organizationsCount' => Organization::count(),
+            'volunteersCount'    => Volunteer::count(),
+            'membershipsCount'   => OrganizationVolunteer::count(),
+        ]);
     }
 }

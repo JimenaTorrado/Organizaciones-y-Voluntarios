@@ -84,7 +84,7 @@
             <label for="image">Foto</label>
             @if(!empty($volunteer->image))
             <div class="mb-2">
-                <img src="{{ asset('uploads/volunteers/' . $volunteer->image) }}" alt="Foto actual" style="max-width:100px;">
+                <img src="{{ asset('storage/' . $volunteer->image) }}" alt="Foto actual" style="max-width:100px;">
             </div>
             @endif
             <input type="file" id="image" name="image" accept="image/*"
