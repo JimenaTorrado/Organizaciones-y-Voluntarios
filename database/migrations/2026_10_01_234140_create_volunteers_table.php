@@ -16,9 +16,12 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('city');
             $table->date('birth_date');
+            $table->string('image')->nullable();
+            $table->boolean('status')->default(true);
+            $table->string('registered_by');
             $table->timestamps();
         });
     }

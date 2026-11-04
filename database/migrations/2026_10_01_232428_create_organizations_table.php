@@ -17,11 +17,12 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('type');
             $table->string('phone');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('address');
             $table->string('city');
-            $table->date('date');
+            $table->date('creation_date');
             $table->boolean('status')->default(true);
+            $table->string('registered_by');
             $table->timestamps();
         });
     }

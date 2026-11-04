@@ -13,16 +13,13 @@ return new class extends Migration
     {
         Schema::create('organization_volunteer', function (Blueprint $table) {
             $table->id();
-
-
-            $table->foreignId('organization_id')->constrained
-            $table->foreignId('volunteer_id')->constrained
+            $table->foreignId('organization_id')->constrained();
+            $table->foreignId('volunteer_id')->constrained();
             $table->date('join_date');
             $table->string('role');
             $table->string('registered_by');
-            
             $table->timestamps();
-            
+
         });
     }
 
