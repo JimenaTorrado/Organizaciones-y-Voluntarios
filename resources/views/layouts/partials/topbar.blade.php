@@ -16,13 +16,13 @@
                 <img src="{{ asset('backend/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="">
                 @endif
             </div>
-            <div class="info" style="color:#6c757d">
+            <div class="info">
                 {{ Auth::user()->name }}
             </div>
         </div>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();" title="Cerrar Sesión" role="button">
-                <i class='fas fa-power-off' style='font-size:24px; color:red'></i>
+                <i class="fas fa-power-off" style="font-size:22px"></i>
             </a>
             <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none">
                 @csrf

@@ -1,0 +1,135 @@
+/*
+ * Tema verde/azul del panel, igual al del login (layouts/guest.blade.php).
+ * Se carga después de adminlte.min.css para sobrescribir sus colores.
+ */
+:root {
+    --verde: #16a34a;
+    --verde-oscuro: #15803d;
+    --verde-claro: #dcfce7;
+    --azul: #1d4ed8;
+    --azul-oscuro: #1e40af;
+    --azul-claro: #dbeafe;
+    --texto: #1f2937;
+    --texto-suave: #6b7280;
+    --borde: #e5e7eb;
+    --fondo: #f5f7fa;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    color: var(--texto);
+}
+
+a { color: var(--azul); }
+a:hover { color: var(--azul-oscuro); }
+
+.content-wrapper { background: var(--fondo); }
+
+/* ---------- Barra superior ---------- */
+.main-header.navbar {
+    background: linear-gradient(90deg, var(--verde-oscuro), var(--azul));
+    border-bottom: 0;
+}
+
+.main-header.navbar .navbar-nav .nav-link,
+.main-header.navbar .navbar-nav .nav-link:hover,
+.main-header .user-panel .info { color: #fff; }
+
+/* ---------- Menú lateral ---------- */
+.main-sidebar {
+    background: linear-gradient(180deg, var(--verde-oscuro), var(--azul-oscuro));
+}
+
+.main-sidebar .brand-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, .2);
+}
+
+.brand-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--verde-oscuro);
+}
+
+.main-sidebar .brand-text { font-weight: 800 !important; font-size: 15px; white-space: normal; line-height: 1.1; }
+
+.main-sidebar .nav-sidebar .nav-link { color: rgba(255, 255, 255, .85); border-radius: 10px; }
+.main-sidebar .nav-sidebar .nav-link:hover { color: #fff; background: rgba(255, 255, 255, .12); }
+
+.main-sidebar .nav-sidebar > .nav-item > .nav-link.active {
+    background: #fff;
+    color: var(--verde-oscuro);
+    box-shadow: none;
+    font-weight: 700;
+}
+
+/* ---------- Tarjetas ---------- */
+.card {
+    border: 0;
+    border-top: 4px solid var(--verde);
+    border-radius: 16px;
+    box-shadow: 0 10px 35px rgba(30, 64, 175, .10);
+    overflow: hidden;
+}
+
+.card-header.bg-secondary {
+    background: #fff !important;
+    color: var(--texto) !important;
+    border-bottom: 1px solid var(--borde);
+}
+
+.card-header h3 { margin: 0; font-size: 1.4rem; font-weight: 600; }
+.card-footer { background: #fff; border-top: 1px solid var(--borde); }
+
+/* ---------- Botones ---------- */
+.btn { border-radius: 10px; font-weight: 700; }
+.btn-flat { border-radius: 10px; }
+
+.btn-primary,
+.btn-success { background: var(--verde); border-color: var(--verde); color: #fff; }
+.btn-primary:hover, .btn-primary:focus,
+.btn-success:hover, .btn-success:focus { background: var(--verde-oscuro); border-color: var(--verde-oscuro); color: #fff; }
+
+.btn-info { background: var(--azul); border-color: var(--azul); color: #fff; }
+.btn-info:hover, .btn-info:focus { background: var(--azul-oscuro); border-color: var(--azul-oscuro); color: #fff; }
+
+.btn-outline-primary { color: var(--azul); border-color: var(--azul); background: #fff; }
+.btn-outline-primary:hover, .btn-outline-primary:focus { background: var(--azul); border-color: var(--azul); color: #fff; }
+
+/* ---------- Tablas, etiquetas y avisos ---------- */
+.table thead.text-primary th,
+.table thead th { color: var(--azul) !important; border-bottom-width: 1px; }
+
+.badge { border-radius: 999px; padding: .35em .8em; font-weight: 700; }
+.badge-success { background: var(--verde-claro); color: var(--verde-oscuro); }
+.badge-secondary { background: var(--borde); color: var(--texto-suave); }
+
+.alert { border-radius: 12px; border: 0; margin: 0 7.5px 15px; }
+.alert-success { background: var(--verde-claro); color: var(--verde-oscuro); }
+
+/* ---------- Formularios ---------- */
+.form-control { border-radius: 10px; }
+.form-control:focus { border-color: var(--azul); box-shadow: 0 0 0 3px var(--azul-claro); }
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    background: var(--verde);
+    border-color: var(--verde);
+}
+
+/* ---------- Dashboard ---------- */
+.small-box { border-radius: 16px; overflow: hidden; color: #fff !important; }
+.small-box.bg-verde { background: var(--verde); }
+.small-box.bg-azul { background: var(--azul); }
+.small-box.bg-mixto { background: linear-gradient(135deg, var(--verde), var(--azul)); }
+.small-box .icon > i { color: rgba(255, 255, 255, .25); }
+
+/* ---------- Pie de página ---------- */
+.main-footer { background: #fff; color: var(--texto-suave); font-size: 13px; }

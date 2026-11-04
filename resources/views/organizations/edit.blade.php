@@ -29,7 +29,7 @@
                                         <button type="submit" class="btn btn-primary btn-block btn-flat">Actualizar</button>
                                     </div>
                                     <div class="col-lg-2 col-xs-4">
-                                        <a href="{{ route('organizations.index') }}" class="btn btn-danger btn-block btn-flat">Atrás</a>
+                                        <a href="{{ route('organizations.index') }}" class="btn btn-outline-primary btn-block btn-flat">Atrás</a>
                                     </div>
                                 </div>
                             </div>

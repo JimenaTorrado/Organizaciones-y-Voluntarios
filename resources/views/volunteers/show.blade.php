@@ -48,7 +48,7 @@
                     </ul>
                 </div>
                 <div class="card-footer">
-                    <a href="{{ route('volunteers.index') }}" class="btn btn-danger btn-flat">Atrás</a>
+                    <a href="{{ route('volunteers.index') }}" class="btn btn-outline-primary btn-flat">Atrás</a>
                 </div>
             </div>
 

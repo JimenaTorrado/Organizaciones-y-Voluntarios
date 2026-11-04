@@ -14,7 +14,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-4 col-12">
-                    <div class="small-box bg-info">
+                    <div class="small-box bg-verde">
                         <div class="inner">
                             <h3>{{ $organizationsCount }}</h3>
                             <p>Organizaciones</p>
@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="col-lg-4 col-12">
-                    <div class="small-box bg-success">
+                    <div class="small-box bg-azul">
                         <div class="inner">
                             <h3>{{ $volunteersCount }}</h3>
                             <p>Voluntarios</p>
@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="col-lg-4 col-12">
-                    <div class="small-box bg-warning">
+                    <div class="small-box bg-mixto">
                         <div class="inner">
                             <h3>{{ $membershipsCount }}</h3>
                             <p>Vínculos</p>

@@ -70,7 +70,7 @@
                     </div>
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary btn-flat">Vincular</button>
-                        <a href="{{ route('organizations.index') }}" class="btn btn-danger btn-flat">Atrás</a>
+                        <a href="{{ route('organizations.index') }}" class="btn btn-outline-primary btn-flat">Atrás</a>
                     </div>
                 </form>
             </div>

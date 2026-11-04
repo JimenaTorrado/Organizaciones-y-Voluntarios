@@ -7,12 +7,14 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <title>@yield('title') | {{ config('app.name') }}</title>
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Google Font: Nunito (la misma del login) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('backend/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- Theme style (AdminLTE 3, ya incluye Bootstrap 4) -->
     <link rel="stylesheet" href="{{ asset('backend/dist/css/adminlte.min.css') }}">
+    <!-- Colores verde/azul del proyecto, encima de AdminLTE -->
+    <link rel="stylesheet" href="{{ asset('css/tema.css') }}">
     @stack('css')
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">

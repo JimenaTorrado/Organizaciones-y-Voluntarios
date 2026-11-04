@@ -1,6 +1,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <a href="{{ url('/') }}" class="brand-link">
-        <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
+    <a href="{{ route('home') }}" class="brand-link">
+        <span class="brand-icon"><i class="fas fa-hands-helping"></i></span>
+        <span class="brand-text">{{ config('app.name') }}</span>
     </a>
 
     <div class="sidebar">

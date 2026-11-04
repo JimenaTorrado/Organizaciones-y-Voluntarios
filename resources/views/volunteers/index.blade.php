@@ -18,7 +18,7 @@
                         <div class="card-header bg-secondary" style="font-size: 1.75rem;font-weight: 500; line-height: 1.2; margin-bottom: 0.5rem;">
                             <div class="d-flex justify-content-between align-items-center">
                                 <span>@yield('title')</span>
-                                <a href="{{ route('volunteers.create') }}" class="btn btn-light btn-sm">Nuevo voluntario</a>
+                                <a href="{{ route('volunteers.create') }}" class="btn btn-primary btn-sm">Nuevo voluntario</a>
                             </div>
                         </div>
                         <div class="card-body table-responsive">
